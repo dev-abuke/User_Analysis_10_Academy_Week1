@@ -34,3 +34,23 @@ class DatabaseConnection:
             print("Connected to the database.")
         except Exception as e:
             print(f"Error connecting to the database: {str(e)}")
+
+    def close(self):
+        """
+        Closes the connection to the database.
+
+        This function checks if the connection to the database is open and closes it if it is.
+        If the connection is successfully closed, it prints a message indicating that the connection has been disconnected.
+
+        Parameters:
+            self (DatabaseConnection): The instance of the DatabaseConnection class.
+
+        Returns:
+            None
+        """
+        if self.connection:
+            self.connection.close()
+            print("Disconnected from the database.")
+
+    def __del__(self):
+        self.close()
