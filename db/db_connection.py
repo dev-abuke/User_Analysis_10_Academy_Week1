@@ -1,3 +1,4 @@
+import pandas as pd
 from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
@@ -47,6 +48,27 @@ class DatabaseConnection:
             print("Connected to the database.")
         except Exception as e:
             print(f"Error connecting to the database: {str(e)}")
+
+    def execute_query(self, query):
+        """
+        Executes a SQL query on the database.
+
+        This function executes the provided SQL query on the database using the connection object.
+        If the query is successful, it prints a message indicating that the query has been executed.
+        If an exception occurs during the query execution, it prints an error message with the specific exception details.
+
+        Parameters:
+            self (DatabaseConnection): The instance of the DatabaseConnection class.
+            query (str): The SQL query to be executed.
+
+        Returns:
+            None
+        """
+        try:
+            df = pd.read_sql_query(query, self.connection)
+            return df
+        except Exception as e:
+            print(f"Error executing query: {str(e)}")
 
     def close(self):
         """
