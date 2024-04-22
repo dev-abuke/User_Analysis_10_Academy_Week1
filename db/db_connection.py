@@ -26,3 +26,11 @@ class DatabaseConnection:
         self.connection_url = f"postgresql+psycopg2://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
         self.engine = None
         self.connection = None
+    
+    def connect(self):
+        try:
+            self.engine = create_engine(self.connection_url)
+            self.connection = self.engine.connect()
+            print("Connected to the database.")
+        except Exception as e:
+            print(f"Error connecting to the database: {str(e)}")
