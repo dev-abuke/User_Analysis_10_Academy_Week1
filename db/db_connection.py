@@ -28,6 +28,19 @@ class DatabaseConnection:
         self.connection = None
     
     def connect(self):
+        """
+        Establishes a connection to the database.
+
+        This function creates a connection engine using the provided connection URL and establishes a connection to the database.
+        If the connection is successful, it prints a message indicating that the connection has been established.
+        If an exception occurs during the connection process, it prints an error message with the specific exception details.
+
+        Parameters:
+            self (DatabaseConnection): The instance of the DatabaseConnection class.
+
+        Returns:
+            None
+        """
         try:
             self.engine = create_engine(self.connection_url)
             self.connection = self.engine.connect()
