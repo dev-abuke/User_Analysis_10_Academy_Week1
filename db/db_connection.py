@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 
-class DatabaseConnection:
+class Database:
     def __init__(self):
         """
         Initialize the database connection object with the provided database credentials.
