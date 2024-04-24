@@ -92,4 +92,26 @@ class PreProcess:
         
         return df
 
+    def drop_missing_variables(self, df: pd.DataFrame, percentage: float = 0.25) -> pd.DataFrame:
+        """Drop variables with more than 25% missing values.
+
+        This method drops columns in the given dataframe where a percentage of
+        missing values is greater than 25%.
+
+        Args:
+            percentage: The maximum percentage of missing values allowed.
+            df (pd.DataFrame): DataFrame to be preprocessed
+
+        Returns:
+            pd.DataFrame: The preprocessed DataFrame with variables removed
+                that had more than the specified percentage of missing values.
+        """
+        # Calculate the percentage of missing values for each column
+        missing_percent = df.isna().mean()
+
+        # Create a boolean mask to identify columns with missing values > 30%
+        mask = missing_percent > percentage
+
+        # Drop columns with missing values greater than the specified percentage
+        return df.loc[:, ~mask]
 
