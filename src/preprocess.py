@@ -72,4 +72,24 @@ class PreProcess:
         df = df.drop_duplicates()
 
         return df
+    
+    def clean_feature_name(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Clean the feature names of the given dataframe.
+
+        This method does the following:
+            1. Replaces any whitespace with an underscore in the column names.
+            2. Converts all column names to lowercase.
+            3. In-place modifies the dataframe with the cleaned column names.
+
+        Args:
+            df (pd.DataFrame): The dataframe to be preprocessed.
+
+        Returns:
+            pd.DataFrame: The preprocessed dataframe with cleaned feature names.
+        """
+        df.rename(columns=lambda x: x.replace(' ', '_').lower(), inplace=True)
+        
+        return df
+
 
