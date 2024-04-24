@@ -134,21 +134,74 @@ class PreProcess:
         return df.loc[:, ~mask]
 
     def fill_missing_median(self, df):
-            """This method fills missing numerical values in the given dataframe
-            with the median of that column's values. The preprocessed columns are
-            returned.
+        """This method fills missing numerical values in the given dataframe
+        with the median of that column's values. This preprocessing step is
+        important because missing values can significantly impact the results
+        of machine learning algorithms. The median is a robust measure of
+        central tendency that is less affected by outliers than the mean.
 
-            Args:
-                df (pd.DataFrame): The dataframe to be preprocessed
+        The method first makes a copy of the input dataframe to prevent
+        modifying the original data. It then gets the column names of all
+        numerical columns in the dataframe.
 
-            Returns:
-                list: The list of preprocessed numerical columns
-            """
-            # Get the column names of all numerical columns
-            numerical_cols = df.select_dtypes(include=np.number).columns
+        Next, the method uses pandas DataFrame method `fillna` to replace
+        missing values in each numerical column with the median of that
+        column's values. The `fillna` method takes two arguments: the first is
+        the value to fill missing values with, and the second is the axis
+        along which to fill missing values. In this case, we want to fill
+        missing values in each column, so we pass in `axis=0`. We also pass
+        in a Series object containing the median of each column, which is
+        calculated using the pandas Series method `median`.
 
-            # Replace missing values with median for each numerical column
-            df[numerical_cols] = df[numerical_cols].fillna(df[numerical_cols].median(), axis=0)
+        Finally, the method returns a list of the preprocessed numerical
+        columns.
 
-            # Return the list of preprocessed numerical columns
-            return numerical_cols
+        Args:
+            df (pd.DataFrame): The dataframe to be preprocessed
+
+        Returns:
+            list: The list of preprocessed numerical columns
+        """
+        df_filled = df.copy()
+        # Get the column names of all numerical columns
+        numerical_cols = df.select_dtypes(include=np.number).columns
+
+        # Replace missing values with median for each numerical column
+        df_filled[numerical_cols] = df_filled[numerical_cols].fillna(df_filled[numerical_cols].median(), axis=0)
+        
+        # Return the list of preprocessed numerical columns
+        return numerical_cols, df_filled
+
+    def fill_categorical(self, df, cols, numerical_cols, df_filled):
+        """Fill categorical variables.
+
+        This function fills categorical variables with the mode of that column
+        in the dataframe. The mode is the most frequently occurring value in
+        the column. If there are multiple modes, it fills with the first
+        mode (index 0).
+
+        The function takes in the following arguments:
+            df (pd.DataFrame): The dataframe to be preprocessed
+            cols(list): List of columns
+            num_cols(list): List of numerical columns
+            df_single(pd.DataFrame): Dataframe with filled numerical variables
+
+        The function does the following:
+            1. Get the set difference of all categorical columns and numerical
+               columns to get the categorical columns.
+            2. Replace missing values in the categorical columns with the mode
+               of that column in the dataframe using df[cat_cols].mode().iloc[0]
+            3. Return the new columns in the dataframe (df_cols) and the
+               preprocessed dataframe (df_single) and the list of categorical
+               columns (cat_cols)
+
+        Returns:
+            tuple: (df_cols (list), df_single (pd.DataFrame), cat_cols (list))
+        """
+        non_numerical_cols = list(set(cols) - set(numerical_cols))
+
+        df_filled[non_numerical_cols] = df_filled[non_numerical_cols].fillna(df[non_numerical_cols].mode().iloc[0])
+
+        df_cols = df_filled.columns
+
+        return df_cols, df_filled, non_numerical_cols
