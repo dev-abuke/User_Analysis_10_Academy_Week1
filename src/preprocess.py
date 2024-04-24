@@ -44,15 +44,9 @@ class PreProcess:
         Returns:
             pd.DataFrame: the dataframe
         """
-        # Calculate total number of cells in dataframe
-        totalCells = np.product(df.shape)
-
-        # Count number of missing values per column
-        missingCount = df.isnull().sum()
-
         # Calculate total number of missing values
-        totalMissing = missingCount.sum()
+        totalMissing = df.isna().sum().sum()
 
         # Calculate percentage of missing values
         print("Dataset contains", round(
-            ((totalMissing/totalCells) * 100), 2), "%", "Total Missing Values.")
+            (totalMissing/len(df.values.flat)) * 100, 2), "%", "Total Missing Values.")
