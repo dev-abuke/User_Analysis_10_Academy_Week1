@@ -34,3 +34,25 @@ class PreProcess:
         #round the percent to 2 decimal point
         mis_val_percent = np.round(mis_val_percent, 2)
         print(f"The telecom dataset contains {mis_val_percent} % missing values.")
+
+    def total_percent_missing(self, df: pd.DataFrame):
+        """Get the percentage of missing values in the dataset.
+
+        Args:
+            df (pd.DataFrame): a dataframe to be preprocessed
+
+        Returns:
+            pd.DataFrame: the dataframe
+        """
+        # Calculate total number of cells in dataframe
+        totalCells = np.product(df.shape)
+
+        # Count number of missing values per column
+        missingCount = df.isnull().sum()
+
+        # Calculate total number of missing values
+        totalMissing = missingCount.sum()
+
+        # Calculate percentage of missing values
+        print("Dataset contains", round(
+            ((totalMissing/totalCells) * 100), 2), "%", "Total Missing Values.")
