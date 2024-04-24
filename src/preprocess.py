@@ -50,3 +50,26 @@ class PreProcess:
         # Calculate percentage of missing values
         print("Dataset contains", round(
             (totalMissing/len(df.values.flat)) * 100, 2), "%", "Total Missing Values.")
+        
+    def drop_duplicates(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Drop duplicates.
+
+        Drop duplicate rows from the dataframe.
+
+        Args:
+            df (pd.DataFrame): The dataframe to drop duplicates from.
+
+        Returns:
+            pd.DataFrame: The dataframe without duplicate rows.
+        """
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("df must be a pandas DataFrame. Got "
+                            f"{type(df)} instead.")
+        if df is None:
+            raise ValueError("df cannot be None. It must be a valid pandas "
+                             "DataFrame.")
+
+        df = df.drop_duplicates()
+
+        return df
+
