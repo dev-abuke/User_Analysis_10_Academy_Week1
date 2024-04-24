@@ -93,10 +93,28 @@ class PreProcess:
         return df
 
     def drop_missing_variables(self, df: pd.DataFrame, percentage: float = 0.25) -> pd.DataFrame:
-        """Drop variables with more than 25% missing values.
+        """Remove columns with missing values higher than the specified percentage.
 
-        This method drops columns in the given dataframe where a percentage of
-        missing values is greater than 25%.
+        This method drops columns from the given dataframe where a percentage of
+        missing values is greater than the specified percentage. This preprocessing
+        step is important to avoid issues during model training and to reduce the
+        dimensionality of the dataset.
+
+        The percentage of missing values for each column is calculated using the
+        pandas DataFrame method `isna`. This method returns a boolean array indicating
+        the location of missing values in the DataFrame. The mean of the boolean array
+        is then calculated to give the percentage of missing values for each column.
+
+        A boolean mask is created by comparing the percentage of missing values
+        to the specified percentage. The mask is True for columns where the percentage
+        of missing values is greater than the specified percentage.
+
+        The columns with missing values greater than the specified percentage
+        are dropped from the dataframe using the pandas DataFrame method `loc`.
+        The `loc` method allows us to select rows and columns based on label(s) or
+        a boolean array. In this case, we are passing a boolean array to select
+        the columns where the condition is True. We use the tilde (~) operator to
+        invert the boolean array.
 
         Args:
             percentage: The maximum percentage of missing values allowed.
@@ -108,29 +126,29 @@ class PreProcess:
         """
         # Calculate the percentage of missing values for each column
         missing_percent = df.isna().mean()
-
-        # Create a boolean mask to identify columns with missing values > 30%
+        print(missing_percent)
+        # Create a boolean mask to identify columns with missing values > percentage or 0.25
         mask = missing_percent > percentage
 
         # Drop columns with missing values greater than the specified percentage
         return df.loc[:, ~mask]
 
-def fill_missing_median(self, df):
-        """This method fills missing numerical values in the given dataframe
-        with the median of that column's values. The preprocessed columns are
-        returned.
+    def fill_missing_median(self, df):
+            """This method fills missing numerical values in the given dataframe
+            with the median of that column's values. The preprocessed columns are
+            returned.
 
-        Args:
-            df (pd.DataFrame): The dataframe to be preprocessed
+            Args:
+                df (pd.DataFrame): The dataframe to be preprocessed
 
-        Returns:
-            list: The list of preprocessed numerical columns
-        """
-        # Get the column names of all numerical columns
-        num_cols = df.select_dtypes(include=np.number).columns
+            Returns:
+                list: The list of preprocessed numerical columns
+            """
+            # Get the column names of all numerical columns
+            numerical_cols = df.select_dtypes(include=np.number).columns
 
-        # Replace missing values with median for each numerical column
-        df[num_cols] = df[num_cols].fillna(df[num_cols].median(), axis=0)
+            # Replace missing values with median for each numerical column
+            df[numerical_cols] = df[numerical_cols].fillna(df[numerical_cols].median(), axis=0)
 
-        # Return the list of preprocessed numerical columns
-        return num_cols
+            # Return the list of preprocessed numerical columns
+            return numerical_cols
