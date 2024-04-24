@@ -115,3 +115,22 @@ class PreProcess:
         # Drop columns with missing values greater than the specified percentage
         return df.loc[:, ~mask]
 
+def fill_missing_median(self, df):
+        """This method fills missing numerical values in the given dataframe
+        with the median of that column's values. The preprocessed columns are
+        returned.
+
+        Args:
+            df (pd.DataFrame): The dataframe to be preprocessed
+
+        Returns:
+            list: The list of preprocessed numerical columns
+        """
+        # Get the column names of all numerical columns
+        num_cols = df.select_dtypes(include=np.number).columns
+
+        # Replace missing values with median for each numerical column
+        df[num_cols] = df[num_cols].fillna(df[num_cols].median(), axis=0)
+
+        # Return the list of preprocessed numerical columns
+        return num_cols
