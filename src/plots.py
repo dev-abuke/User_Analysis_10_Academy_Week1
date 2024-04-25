@@ -33,3 +33,17 @@ class Plot:
         plt.ylabel(ylabel)
 
         plt.show()
+
+    def plot_box(self, df: pd.DataFrame, x_col: str, title: str) -> None:
+        """Plot box chart of the column.
+
+        Args:
+            df (pd.DataFrame): Dataframe to be plotted.
+            x_col (str): column to be plotted.
+            title (str): title of chart.
+        """
+        plt.figure(figsize=(12, 7))
+        sns.boxplot(data=df, x=x_col)
+        plt.title(title, size=20)
+        plt.xticks(rotation=75, fontsize=14)
+        plt.show()
