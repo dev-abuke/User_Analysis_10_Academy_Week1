@@ -27,10 +27,10 @@ class Plot:
     def plot_bar(self, x, y, xlabel,ylabel,title,palette=None) -> None:
         plt.figure(figsize=(12, 6))
         sns.barplot(x=x, y=y, palette="viridis")
-
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
+        plt.xticks(rotation=45)
 
         plt.show()
 
